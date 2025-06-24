@@ -94,7 +94,7 @@
 }
 
 .gradient-bg {
-  background: linear-gradient(135deg, #50B7E8 0%, #87CEEB 100%);
+  background: linear-gradient(135deg, #3B82F6 0%, #1E40AF 100%);
 }
 
 .cloud-shape {
@@ -122,4 +122,31 @@
   height: 40px;
   background: inherit;
   border-radius: 50%;
+}
+
+/* Enhanced animations for better visual appeal */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes bounce-gentle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-bounce-gentle {
+  animation: bounce-gentle 3s ease-in-out infinite;
 }
