@@ -1,88 +1,70 @@
 
 import { Card, CardContent } from "@/components/ui/card";
-import { Star, Heart } from "lucide-react";
+import { Heart } from "lucide-react";
 
 const Gallery = () => {
   const examples = [
     {
-      title: "A Aventura do Urso Corajoso",
-      author: "Ana, 7 anos",
-      image: "https://images.unsplash.com/photo-1582562124811-c09040d0a901?auto=format&fit=crop&w=400&h=300",
-      rating: 5,
-      description: "Uma história incrível sobre um urso que salva a floresta"
+      title: "AVENTURA DA SOFIA",
+      image: "🐥",
+      bgColor: "bg-yellow-100",
+      likes: 3460,
+      color: "text-orange-600"
     },
     {
-      title: "O Gato Mágico",
-      author: "Pedro, 6 anos",
-      image: "https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?auto=format&fit=crop&w=400&h=300",
-      rating: 5,
-      description: "As aventuras de um gato com poderes especiais"
+      title: "O ROBÔ",
+      image: "🤖",
+      bgColor: "bg-blue-100", 
+      likes: 3460,
+      color: "text-blue-600"
     },
     {
-      title: "Família de Cervos",
-      author: "Maria, 8 anos",
-      image: "https://images.unsplash.com/photo-1439886183900-e79ec0057170?auto=format&fit=crop&w=400&h=300",
-      rating: 5,
-      description: "Uma linda história sobre amizade na floresta"
-    },
-    {
-      title: "Minha Casa dos Sonhos",
-      author: "João, 5 anos",
-      image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04?auto=format&fit=crop&w=400&h=300",
-      rating: 5,
-      description: "Um livro sobre o lar perfeito para toda família"
+      title: "O MONSTRO AZUL",
+      image: "👾",
+      bgColor: "bg-cyan-100",
+      likes: 3460,
+      color: "text-cyan-600"
     }
   ];
 
   return (
-    <section id="galeria" className="py-20 bg-gradient-to-b from-blue-50 to-purple-50">
+    <section id="galeria" className="py-20 bg-yellow-200">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
-            Galeria de Criações
-          </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Veja alguns dos livros incríveis que outras crianças já criaram com o JackBoo
-          </p>
+        <div className="text-center mb-12">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-3xl md:text-4xl font-bold text-blue-600">
+              Lojinha dos Amigos
+            </h2>
+            <button className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full font-semibold">
+              Mais votados
+            </button>
+          </div>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
           {examples.map((example, index) => (
             <Card 
               key={index} 
-              className="group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border-0 shadow-lg overflow-hidden"
+              className="group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border-0 shadow-lg overflow-hidden bg-white"
             >
               <CardContent className="p-0">
-                <div className="relative overflow-hidden">
-                  <img 
-                    src={example.image} 
-                    alt={example.title}
-                    className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full flex items-center">
-                    <Star size={14} className="text-yellow-500 fill-current" />
-                    <span className="text-sm font-semibold ml-1">{example.rating}</span>
-                  </div>
+                <div className={`${example.bgColor} p-8 text-center`}>
+                  <div className="text-6xl mb-4">{example.image}</div>
                 </div>
                 
-                <div className="p-6">
-                  <h3 className="text-lg font-bold text-gray-800 mb-2">
+                <div className="p-4 text-center">
+                  <h3 className={`text-lg font-bold ${example.color} mb-3`}>
                     {example.title}
                   </h3>
-                  <p className="text-orange-btn font-semibold mb-3">
-                    Por {example.author}
-                  </p>
-                  <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                    {example.description}
-                  </p>
                   
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
-                      {[...Array(example.rating)].map((_, i) => (
-                        <Star key={i} size={16} className="text-yellow-500 fill-current" />
-                      ))}
+                      <Heart size={16} className="text-red-500 fill-current mr-1" />
+                      <span className="text-sm font-semibold">{example.likes}</span>
                     </div>
-                    <Heart size={20} className="text-pink-500 hover:text-pink-600 cursor-pointer transition-colors" />
+                    <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
+                      Ver livro
+                    </button>
                   </div>
                 </div>
               </CardContent>

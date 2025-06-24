@@ -4,6 +4,7 @@ import Hero from "@/components/Hero";
 import HowItWorks from "@/components/HowItWorks";
 import CreateBook from "@/components/CreateBook";
 import Gallery from "@/components/Gallery";
+import Testimonials from "@/components/Testimonials";
 import Footer from "@/components/Footer";
 
 const Index = () => {
@@ -14,6 +15,7 @@ const Index = () => {
       <HowItWorks />
       <CreateBook />
       <Gallery />
+      <Testimonials />
       <Footer />
     </div>
   );
