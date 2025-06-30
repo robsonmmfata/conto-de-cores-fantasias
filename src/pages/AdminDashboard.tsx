@@ -3,13 +3,15 @@ import { useAuth } from '@/hooks/useAuth';
 import { Navigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Users, Shield, ArrowLeft, UserPlus } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Users, Shield, ArrowLeft, MessageCircle, CreditCard, UserPlus, Bot } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { UsersManagement } from '@/components/admin/UsersManagement';
+import { ChatsManagement } from '@/components/admin/ChatsManagement';
+import { SubscriptionsManagement } from '@/components/admin/SubscriptionsManagement';
+import { CharactersManagement } from '@/components/admin/CharactersManagement';
 
 interface UserProfile {
   id: string;
@@ -19,100 +21,92 @@ interface UserProfile {
   roles: string[];
 }
 
+interface DashboardStats {
+  totalUsers: number;
+  totalAdmins: number;
+  totalChats: number;
+  totalSubscriptions: number;
+  totalCharacters: number;
+  newUsersThisWeek: number;
+}
+
 const AdminDashboard = () => {
   const { user, signOut, loading, isAdmin } = useAuth();
-  const [users, setUsers] = useState<UserProfile[]>([]);
-  const [loadingUsers, setLoadingUsers] = useState(true);
-  const [newAdminEmail, setNewAdminEmail] = useState('');
-  const [creatingAdmin, setCreatingAdmin] = useState(false);
-  const [error, setError] = useState('');
+  const [stats, setStats] = useState<DashboardStats>({
+    totalUsers: 0,
+    totalAdmins: 0,
+    totalChats: 0,
+    totalSubscriptions: 0,
+    totalCharacters: 0,
+    newUsersThisWeek: 0
+  });
+  const [loadingStats, setLoadingStats] = useState(true);
   const { toast } = useToast();
 
   useEffect(() => {
     if (isAdmin) {
-      fetchUsers();
+      fetchDashboardStats();
     }
   }, [isAdmin]);
 
-  const fetchUsers = async () => {
+  const fetchDashboardStats = async () => {
     try {
-      const { data: profiles, error: profilesError } = await supabase
+      // Fetch users count
+      const { count: usersCount } = await supabase
         .from('profiles')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .select('*', { count: 'exact', head: true });
 
-      if (profilesError) throw profilesError;
-
-      const { data: roles, error: rolesError } = await supabase
+      // Fetch admins count
+      const { count: adminsCount } = await supabase
         .from('user_roles')
-        .select('user_id, role');
-
-      if (rolesError) throw rolesError;
-
-      const usersWithRoles = profiles?.map(profile => ({
-        ...profile,
-        roles: roles?.filter(role => role.user_id === profile.id).map(role => role.role) || []
-      })) || [];
-
-      setUsers(usersWithRoles);
-    } catch (error) {
-      console.error('Error fetching users:', error);
-    } finally {
-      setLoadingUsers(false);
-    }
-  };
-
-  const makeUserAdmin = async (userId: string) => {
-    try {
-      const { error } = await supabase
-        .from('user_roles')
-        .insert({ user_id: userId, role: 'admin' });
-
-      if (error) throw error;
-
-      toast({
-        title: "Administrador criado",
-        description: "Usuário promovido a administrador com sucesso.",
-      });
-
-      fetchUsers();
-    } catch (error) {
-      console.error('Error making user admin:', error);
-      toast({
-        title: "Erro",
-        description: "Erro ao promover usuário a administrador.",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const removeAdminRole = async (userId: string) => {
-    try {
-      const { error } = await supabase
-        .from('user_roles')
-        .delete()
-        .eq('user_id', userId)
+        .select('*', { count: 'exact', head: true })
         .eq('role', 'admin');
 
-      if (error) throw error;
+      // Fetch chats count
+      const { count: chatsCount } = await supabase
+        .from('chats')
+        .select('*', { count: 'exact', head: true });
 
-      toast({
-        title: "Role removida",
-        description: "Role de administrador removida com sucesso.",
+      // Fetch subscriptions count
+      const { count: subscriptionsCount } = await supabase
+        .from('subscriptions')
+        .select('*', { count: 'exact', head: true });
+
+      // Fetch characters count
+      const { count: charactersCount } = await supabase
+        .from('characters')
+        .select('*', { count: 'exact', head: true });
+
+      // Fetch new users this week
+      const weekAgo = new Date();
+      weekAgo.setDate(weekAgo.getDate() - 7);
+      
+      const { count: newUsersCount } = await supabase
+        .from('profiles')
+        .select('*', { count: 'exact', head: true })
+        .gte('created_at', weekAgo.toISOString());
+
+      setStats({
+        totalUsers: usersCount || 0,
+        totalAdmins: adminsCount || 0,
+        totalChats: chatsCount || 0,
+        totalSubscriptions: subscriptionsCount || 0,
+        totalCharacters: charactersCount || 0,
+        newUsersThisWeek: newUsersCount || 0
       });
-
-      fetchUsers();
     } catch (error) {
-      console.error('Error removing admin role:', error);
+      console.error('Error fetching dashboard stats:', error);
       toast({
         title: "Erro",
-        description: "Erro ao remover role de administrador.",
+        description: "Erro ao carregar estatísticas do dashboard.",
         variant: "destructive",
       });
+    } finally {
+      setLoadingStats(false);
     }
   };
 
-  if (loading || loadingUsers) {
+  if (loading || loadingStats) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -136,7 +130,7 @@ const AdminDashboard = () => {
               <Shield className="h-8 w-8 text-purple-600 mr-3" />
               Painel Administrativo
             </h1>
-            <p className="text-gray-600 mt-2">Gerencie usuários e administradores do sistema</p>
+            <p className="text-gray-600 mt-2">Gerencie todos os aspectos do sistema JackBoo</p>
           </div>
           <div className="flex gap-4">
             <Button 
@@ -152,134 +146,106 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        {/* Stats Cards */}
+        <div className="grid grid-cols-2 lg:grid-cols-6 gap-4 mb-8">
           <Card>
-            <CardHeader className="text-center">
-              <Users className="h-12 w-12 text-blue-500 mx-auto mb-4" />
-              <CardTitle>Total de Usuários</CardTitle>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-gray-600">Total Usuários</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-center text-blue-600">
-                {users.length}
+              <div className="flex items-center">
+                <Users className="h-4 w-4 text-blue-500 mr-2" />
+                <span className="text-2xl font-bold text-blue-600">{stats.totalUsers}</span>
               </div>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="text-center">
-              <Shield className="h-12 w-12 text-purple-500 mx-auto mb-4" />
-              <CardTitle>Administradores</CardTitle>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-gray-600">Administradores</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-center text-purple-600">
-                {users.filter(u => u.roles.includes('admin')).length}
+              <div className="flex items-center">
+                <Shield className="h-4 w-4 text-purple-500 mr-2" />
+                <span className="text-2xl font-bold text-purple-600">{stats.totalAdmins}</span>
               </div>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="text-center">
-              <UserPlus className="h-12 w-12 text-green-500 mx-auto mb-4" />
-              <CardTitle>Usuários Comuns</CardTitle>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-gray-600">Chats Ativos</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-center text-green-600">
-                {users.filter(u => !u.roles.includes('admin')).length}
+              <div className="flex items-center">
+                <MessageCircle className="h-4 w-4 text-green-500 mr-2" />
+                <span className="text-2xl font-bold text-green-600">{stats.totalChats}</span>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-gray-600">Assinaturas</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center">
+                <CreditCard className="h-4 w-4 text-orange-500 mr-2" />
+                <span className="text-2xl font-bold text-orange-600">{stats.totalSubscriptions}</span>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-gray-600">Personagens</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center">
+                <Bot className="h-4 w-4 text-pink-500 mr-2" />
+                <span className="text-2xl font-bold text-pink-600">{stats.totalCharacters}</span>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-gray-600">Novos (7 dias)</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center">
+                <UserPlus className="h-4 w-4 text-teal-500 mr-2" />
+                <span className="text-2xl font-bold text-teal-600">{stats.newUsersThisWeek}</span>
               </div>
             </CardContent>
           </Card>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Gerenciar Usuários</CardTitle>
-              <CardDescription>
-                Lista de todos os usuários registrados no sistema
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {users.map((user) => (
-                  <div key={user.id} className="flex items-center justify-between p-4 border rounded-lg">
-                    <div>
-                      <p className="font-medium">{user.full_name || 'Nome não informado'}</p>
-                      <p className="text-sm text-gray-600">{user.email}</p>
-                      <div className="flex gap-2 mt-1">
-                        {user.roles.map((role) => (
-                          <span 
-                            key={role}
-                            className={`px-2 py-1 rounded-full text-xs font-medium ${
-                              role === 'admin' 
-                                ? 'bg-purple-100 text-purple-800' 
-                                : 'bg-blue-100 text-blue-800'
-                            }`}
-                          >
-                            {role === 'admin' ? 'Administrador' : 'Usuário'}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="flex gap-2">
-                      {user.roles.includes('admin') ? (
-                        <Button
-                          size="sm"
-                          variant="destructive"
-                          onClick={() => removeAdminRole(user.id)}
-                          disabled={user.id === user.id} // Prevent self-demotion
-                        >
-                          Remover Admin
-                        </Button>
-                      ) : (
-                        <Button
-                          size="sm"
-                          className="bg-purple-600 hover:bg-purple-700"
-                          onClick={() => makeUserAdmin(user.id)}
-                        >
-                          Tornar Admin
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+        {/* Main Content with Tabs */}
+        <Tabs defaultValue="users" className="w-full">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="users">Usuários</TabsTrigger>
+            <TabsTrigger value="chats">Chats</TabsTrigger>
+            <TabsTrigger value="subscriptions">Assinaturas</TabsTrigger>
+            <TabsTrigger value="characters">Personagens</TabsTrigger>
+          </TabsList>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Instruções</CardTitle>
-              <CardDescription>
-                Como gerenciar administradores no sistema
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="p-4 bg-blue-50 rounded-lg">
-                <h4 className="font-medium text-blue-900 mb-2">Promover Usuário a Admin</h4>
-                <p className="text-sm text-blue-800">
-                  Clique em "Tornar Admin" ao lado do usuário que você deseja promover. 
-                  O usuário terá acesso completo ao painel administrativo.
-                </p>
-              </div>
+          <TabsContent value="users" className="mt-6">
+            <UsersManagement onStatsUpdate={fetchDashboardStats} />
+          </TabsContent>
 
-              <div className="p-4 bg-orange-50 rounded-lg">
-                <h4 className="font-medium text-orange-900 mb-2">Remover Role de Admin</h4>
-                <p className="text-sm text-orange-800">
-                  Clique em "Remover Admin" para revogar os privilégios administrativos. 
-                  O usuário voltará a ser um usuário comum.
-                </p>
-              </div>
+          <TabsContent value="chats" className="mt-6">
+            <ChatsManagement />
+          </TabsContent>
 
-              <div className="p-4 bg-green-50 rounded-lg">
-                <h4 className="font-medium text-green-900 mb-2">Primeiro Administrador</h4>
-                <p className="text-sm text-green-800">
-                  Para criar o primeiro administrador, registre-se com o email desejado 
-                  e depois use o SQL Editor do Supabase para executar a query de promoção manual.
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+          <TabsContent value="subscriptions" className="mt-6">
+            <SubscriptionsManagement />
+          </TabsContent>
+
+          <TabsContent value="characters" className="mt-6">
+            <CharactersManagement onStatsUpdate={fetchDashboardStats} />
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
