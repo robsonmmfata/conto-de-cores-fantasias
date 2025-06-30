@@ -36,7 +36,7 @@ const Gallery = () => {
           </h2>
           <Button 
             variant="outline" 
-            className="border-orange-btn text-orange-btn hover:bg-orange-btn hover:text-white rounded-full px-6"
+            className="border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white rounded-full px-6"
           >
             Ver Todos
           </Button>
@@ -48,12 +48,12 @@ const Gallery = () => {
               <CardContent className="p-0">
                 <div className={`${book.bgColor} h-32 rounded-t-lg flex items-center justify-center`}>
                   {/* Simple bear mascot */}
-                  <div className="w-16 h-20 bg-yellow-accent rounded-t-full rounded-b-2xl relative">
-                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-10 h-10 bg-yellow-accent rounded-full">
+                  <div className="w-16 h-20 bg-yellow-300 rounded-t-full rounded-b-2xl relative">
+                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-10 h-10 bg-yellow-300 rounded-full">
                       <div className="absolute top-1 left-1 w-2 h-2 bg-black rounded-full"></div>
                       <div className="absolute top-1 right-1 w-2 h-2 bg-black rounded-full"></div>
                     </div>
-                    <div className="absolute top-1 left-1/2 transform -translate-x-1/2 w-10 h-6 bg-orange-btn rounded-t-2xl"></div>
+                    <div className="absolute top-1 left-1/2 transform -translate-x-1/2 w-10 h-6 bg-orange-500 rounded-t-2xl"></div>
                   </div>
                 </div>
                 <div className="p-4">
@@ -65,7 +65,7 @@ const Gallery = () => {
                     </div>
                     <Button 
                       size="sm" 
-                      className="bg-orange-btn hover:bg-orange-600 text-white text-xs rounded-full px-3 py-1"
+                      className="bg-orange-500 hover:bg-orange-600 text-white text-xs rounded-full px-3 py-1"
                     >
                       Ver Livro
                     </Button>

@@ -19,16 +19,16 @@ const Header = () => {
   };
 
   return (
-    <header className="w-full bg-blue-500 border-b border-blue-400 sticky top-0 z-50">
+    <header className="w-full bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center space-x-2 cursor-pointer" onClick={() => navigate('/')}>
             <div className="font-logo text-3xl">
-              <span className="text-white">Jack</span>
-              <span className="text-orange-500">B</span>
-              <span className="text-green-400">o</span>
-              <span className="text-yellow-300">o</span>
+              <span className="text-orange-500">Jack</span>
+              <span className="text-blue-500">B</span>
+              <span className="text-green-500">o</span>
+              <span className="text-yellow-500">o</span>
             </div>
           </div>
 
@@ -36,32 +36,31 @@ const Header = () => {
           <nav className="hidden md:flex items-center space-x-8">
             <a 
               href="#home" 
-              className="text-white hover:text-yellow-300 transition-colors font-medium"
+              className="text-gray-700 hover:text-orange-500 transition-colors font-medium"
             >
-              Depoimentos
+              Início
             </a>
             <a 
               href="#como-funciona" 
-              className="text-white hover:text-yellow-300 transition-colors font-medium"
+              className="text-gray-700 hover:text-orange-500 transition-colors font-medium"
             >
-              Funcionamento
+              Clube JackBoo
             </a>
-            <Button 
-              variant="outline"
-              className="bg-transparent border-white text-white hover:bg-white hover:text-blue-500 px-6 py-2 rounded-full font-semibold"
-              onClick={() => navigate('/auth')}
+            <a 
+              href="#lojinha" 
+              className="text-gray-700 hover:text-orange-500 transition-colors font-medium"
             >
-              Criar conta
-            </Button>
+              Lojinha
+            </a>
           </nav>
 
-          {/* User Actions */}
+          {/* Login Button */}
           <div className="hidden md:flex items-center gap-4">
             {user ? (
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
-                  <User className="h-4 w-4 text-white" />
-                  <span className="text-sm font-medium text-white">
+                  <User className="h-4 w-4 text-gray-600" />
+                  <span className="text-sm font-medium text-gray-700">
                     {user.user_metadata?.full_name || 'Usuário'}
                   </span>
                   {isAdmin && (
@@ -72,14 +71,14 @@ const Header = () => {
                 </div>
                 <Button 
                   onClick={handleAuthAction}
-                  className="bg-white text-blue-500 hover:bg-gray-100 px-6 py-2 rounded-full font-semibold"
+                  className="bg-orange-500 text-white hover:bg-orange-600 px-6 py-2 rounded-full font-semibold"
                 >
                   Dashboard
                 </Button>
                 <Button 
                   variant="outline"
                   onClick={signOut}
-                  className="bg-transparent border-white text-white hover:bg-white hover:text-blue-500 px-6 py-2 rounded-full font-semibold"
+                  className="bg-transparent border-gray-300 text-gray-700 hover:bg-gray-50 px-6 py-2 rounded-full font-semibold"
                 >
                   <LogOut className="h-4 w-4 mr-2" />
                   Sair
@@ -97,7 +96,7 @@ const Header = () => {
 
           {/* Mobile Menu Button */}
           <button 
-            className="md:hidden text-white"
+            className="md:hidden text-gray-700"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -106,28 +105,35 @@ const Header = () => {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <nav className="md:hidden mt-4 pb-4 border-t border-blue-400 pt-4">
+          <nav className="md:hidden mt-4 pb-4 border-t border-gray-200 pt-4">
             <div className="flex flex-col space-y-3">
               <a 
                 href="#home" 
-                className="text-white hover:text-yellow-300 transition-colors font-medium py-2"
+                className="text-gray-700 hover:text-orange-500 transition-colors font-medium py-2"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Depoimentos
+                Início
               </a>
               <a 
                 href="#como-funciona" 
-                className="text-white hover:text-yellow-300 transition-colors font-medium py-2"
+                className="text-gray-700 hover:text-orange-500 transition-colors font-medium py-2"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Funcionamento
+                Clube JackBoo
+              </a>
+              <a 
+                href="#lojinha" 
+                className="text-gray-700 hover:text-orange-500 transition-colors font-medium py-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Lojinha
               </a>
               
               {user ? (
-                <div className="space-y-3 pt-4 border-t border-blue-400">
+                <div className="space-y-3 pt-4 border-t border-gray-200">
                   <div className="flex items-center gap-2">
-                    <User className="h-4 w-4 text-white" />
-                    <span className="text-sm font-medium text-white">
+                    <User className="h-4 w-4 text-gray-600" />
+                    <span className="text-sm font-medium text-gray-700">
                       {user.user_metadata?.full_name || 'Usuário'}
                     </span>
                     {isAdmin && (
@@ -141,7 +147,7 @@ const Header = () => {
                       handleAuthAction();
                       setIsMenuOpen(false);
                     }}
-                    className="w-full bg-white text-blue-500 hover:bg-gray-100 px-6 py-2 rounded-full font-semibold"
+                    className="w-full bg-orange-500 text-white hover:bg-orange-600 px-6 py-2 rounded-full font-semibold"
                   >
                     Dashboard
                   </Button>
@@ -151,24 +157,14 @@ const Header = () => {
                       signOut();
                       setIsMenuOpen(false);
                     }}
-                    className="w-full bg-transparent border-white text-white hover:bg-white hover:text-blue-500 px-6 py-2 rounded-full font-semibold"
+                    className="w-full bg-transparent border-gray-300 text-gray-700 hover:bg-gray-50 px-6 py-2 rounded-full font-semibold"
                   >
                     <LogOut className="h-4 w-4 mr-2" />
                     Sair
                   </Button>
                 </div>
               ) : (
-                <div className="pt-4 border-t border-blue-400 space-y-2">
-                  <Button 
-                    onClick={() => {
-                      navigate('/auth');
-                      setIsMenuOpen(false);
-                    }}
-                    className="w-full bg-transparent border-white text-white hover:bg-white hover:text-blue-500 px-6 py-2 rounded-full font-semibold mb-2"
-                    variant="outline"
-                  >
-                    Criar conta
-                  </Button>
+                <div className="pt-4 border-t border-gray-200">
                   <Button 
                     onClick={() => {
                       handleAuthAction();
