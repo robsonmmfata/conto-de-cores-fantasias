@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Menu, X, User, LogOut } from "lucide-react";
 import { useState } from "react";
@@ -19,21 +18,20 @@ const Header = () => {
   };
 
   return (
-    <header className="w-full bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+    <header className="w-full bg-[#FFD167] border-b border-gray-200 sticky top-0 z-50 shadow-sm">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center space-x-2 cursor-pointer" onClick={() => navigate('/')}>
-            <div className="font-logo text-3xl">
-              <span className="text-orange-500">Jack</span>
-              <span className="text-blue-500">B</span>
-              <span className="text-green-500">o</span>
-              <span className="text-yellow-500">o</span>
-            </div>
+            <img 
+              src="/public/imagensfigma/logo.png"
+              alt="JackBoo Logo"
+              className="h-10 w-auto object-contain"
+            />
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden md:flex items-center space-x-6">
             <a 
               href="#home" 
               className="text-gray-700 hover:text-orange-500 transition-colors font-medium"
@@ -54,10 +52,19 @@ const Header = () => {
             </a>
           </nav>
 
-          {/* Login Button */}
+          {/* Sacola + Login Button (Desktop) */}
           <div className="hidden md:flex items-center gap-4">
+            {/* Sacola */}
+            <a 
+              href="#sacola" 
+              className="mr-2 flex items-center justify-center"
+              title="Sacola"
+            >
+              <img src="/public/imagensfigma/sacola.png" alt="Sacola" className="h-7 w-7" />
+            </a>
+
             {user ? (
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3">
                 <div className="flex items-center gap-2">
                   <User className="h-4 w-4 text-gray-600" />
                   <span className="text-sm font-medium text-gray-700">
