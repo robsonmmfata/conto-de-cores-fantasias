@@ -1,68 +1,124 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
 const OfficialStore = () => {
-  const books = [
+  const officialStoreBooks = [
     {
-      title: "JackBoo",
+      productImagePath: "/public/imagensfigma/lojinha1.png", // Caminho real da sua imagem
       price: "R$29,90",
-      bgColor: "bg-blue-400"
     },
     {
-      title: "JackBoo", 
+      productImagePath: "/public/imagensfigma/lojinha2.png", // Caminho real da sua imagem
       price: "R$29,90",
-      bgColor: "bg-orange-400"
     },
     {
-      title: "JackBoo",
-      price: "R$29,90", 
-      bgColor: "bg-pink-400"
+      productImagePath: "/public/imagensfigma/lojinha3.png", // Caminho real da sua imagem
+      price: "R$29,90",
     }
   ];
+
+  const friendsStoreItems = [
+    {
+      itemImagePath: "/public/imagensfigma/aventuraduda.png", // Substitua pelo caminho real da imagem
+      likes: 34,
+    },
+    {
+      itemImagePath: "/public/imagensfigma/livrocolorir.png", // Substitua pelo caminho real da imagem
+      likes: 34,
+    },
+    {
+      itemImagePath: "/public/imagensfigma/aventuraduda2.png", // Substitua pelo caminho real da imagem
+      likes: 34,
+    },
+    {
+      itemImagePath: "/public/imagensfigma/jackboocomcoelho.png", // Substitua pelo caminho real da imagem
+      likes: 34,
+    },
+  ];
+
+  const darkBlueText = "text-[#062637]"; // Reutilizando a cor de texto JackBoo
+  const lightOrangeBg = "bg-[#FFEFE3]"; // Cor de fundo da seção Campeonato de Pintura (do Figma)
 
   return (
     <section className="py-20 bg-white">
       <div className="container mx-auto px-4">
+        {/* Seção: Loja Oficial JackBoo */}
         <div className="flex justify-between items-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-800">
+          <h2 className={`text-4xl md:text-5xl font-bold ${darkBlueText}`}>
             Loja Oficial JackBoo
           </h2>
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             className="border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white rounded-full px-6"
           >
             Ver Todos
           </Button>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
-          {books.map((book, index) => (
-            <Card key={index} className="shadow-lg hover:shadow-xl transition-shadow">
-              <CardContent className="p-0">
-                <div className={`${book.bgColor} h-48 rounded-t-lg flex items-center justify-center relative`}>
-                  {/* Bear mascot for each book */}
-                  <div className="w-20 h-24 bg-yellow-300 rounded-t-full rounded-b-2xl relative">
-                    <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 w-12 h-12 bg-yellow-300 rounded-full">
-                      <div className="absolute -top-1 left-2 w-4 h-4 bg-yellow-300 rounded-full"></div>
-                      <div className="absolute -top-1 right-2 w-4 h-4 bg-yellow-300 rounded-full"></div>
-                      <div className="absolute top-2 left-2 w-2 h-2 bg-black rounded-full"></div>
-                      <div className="absolute top-2 right-2 w-2 h-2 bg-black rounded-full"></div>
-                    </div>
-                    <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-14 h-8 bg-orange-500 rounded-t-2xl"></div>
-                  </div>
-                  {/* JackBoo text on book cover */}
-                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white font-bold text-lg">
-                    JackBoo
-                  </div>
-                </div>
-                <div className="p-6 text-center">
-                  <p className="font-bold text-xl text-gray-800 mb-4">{book.price}</p>
+        <div className="grid md:grid-cols-3 gap-8 mb-20"> {/* Adicionado mb-20 para espaçamento com a próxima seção */}
+          {officialStoreBooks.map((book, index) => (
+            <Card
+              key={index}
+              className="overflow-hidden rounded-lg border-none shadow-none hover:shadow-none transition-shadow"
+            >
+              <CardContent className="p-0 flex flex-col h-full">
+                <img
+                  src={book.productImagePath}
+                  alt={`Produto da Loja Oficial JackBoo ${index + 1}`}
+                  className="w-full h-auto object-cover rounded-t-lg flex-grow"
+                />
+
+                <div className="p-4 text-center">
+                  <p className={`font-bold text-xl ${darkBlueText}`}>{book.price}</p>
                 </div>
               </CardContent>
             </Card>
           ))}
         </div>
+
+        {/* Seção: Lojinha dos Amigos */}
+        <div className="flex justify-between items-center mb-12">
+          <h2 className={`text-4xl md:text-5xl font-bold ${darkBlueText}`}>
+            Lojinha dos amigos
+          </h2>
+          <Button
+            variant="outline"
+            className="border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white rounded-full px-6"
+          >
+            Ver Todos
+          </Button>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20"> {/* Grid de 4 colunas para itens da lojinha dos amigos */}
+          {friendsStoreItems.map((item, index) => (
+            <Card
+              key={index}
+              className="overflow-hidden rounded-lg border-none shadow-none hover:shadow-none transition-shadow"
+            >
+              <CardContent className="p-0 flex flex-col items-center"> {/* flex-col e items-center para centralizar */}
+                <img
+                  src={item.itemImagePath}
+                  alt={`Item da Lojinha dos Amigos ${index + 1}`}
+                  className="w-full h-auto object-cover rounded-t-lg"
+                />
+                <div className="flex items-center justify-center py-3"> {/* Contêiner para o coração e o texto "Ver Livro" */}
+                  {/* Ícone de Coração (simplesmente um span por enquanto) */}
+                  <span className="text-red-500 text-lg mr-2">❤️</span>
+                  <p className={`text-base font-semibold ${darkBlueText} mr-4`}>{item.likes}</p>
+                  <Button
+                    variant="outline"
+                    className="border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white rounded-full px-4 py-2 text-sm"
+                  >
+                    Ver Livro
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Seção: Campeonato de Pintura */}
+        
       </div>
     </section>
   );
