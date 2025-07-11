@@ -1,11 +1,14 @@
-
 import { Button } from "@/components/ui/button";
 
 const ClubJackBoo = () => {
+  const bearIllustrationPath = "/public/imagensfigma/ursoclubejackboo.png";
+
   return (
     <section className="py-20 bg-gradient-to-br from-orange-100 to-yellow-100 relative overflow-hidden">
       <div className="container mx-auto px-4">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        {/* Ajustado lg:grid-cols para dar mais espaço à esquerda e empurrar o urso mais para a esquerda */}
+        <div className="grid lg:grid-cols-[1.3fr_0.7fr] gap-12 items-center"> {/* Aumentado a proporção da primeira coluna */}
+          {/* Left Content - Text and Button */}
           <div>
             <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
               Clube JackBoo
@@ -17,56 +20,18 @@ const ClubJackBoo = () => {
               Assinar clube JackBoo
             </Button>
           </div>
-          
+
+          {/* Right Content - Bear Image */}
           <div className="flex justify-center">
-            <div className="relative">
-              {/* Bear with book */}
-              <div className="w-64 h-80 relative">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  {/* Bear Body */}
-                  <div className="w-40 h-48 bg-yellow-300 rounded-t-full rounded-b-3xl relative shadow-xl">
-                    {/* Bear Head */}
-                    <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 w-24 h-24 bg-yellow-300 rounded-full shadow-lg">
-                      {/* Ears */}
-                      <div className="absolute -top-3 left-3 w-8 h-8 bg-yellow-300 rounded-full"></div>
-                      <div className="absolute -top-3 right-3 w-8 h-8 bg-yellow-300 rounded-full"></div>
-                      <div className="absolute -top-1 left-4 w-6 h-6 bg-orange-200 rounded-full"></div>
-                      <div className="absolute -top-1 right-4 w-6 h-6 bg-orange-200 rounded-full"></div>
-                      
-                      {/* Eyes */}
-                      <div className="absolute top-4 left-4 w-3 h-3 bg-black rounded-full"></div>
-                      <div className="absolute top-4 right-4 w-3 h-3 bg-black rounded-full"></div>
-                      
-                      {/* Nose */}
-                      <div className="absolute top-8 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-black rounded-full"></div>
-                    </div>
-                    
-                    {/* Orange Shirt */}
-                    <div className="absolute top-6 left-1/2 transform -translate-x-1/2 w-28 h-18 bg-orange-500 rounded-t-3xl"></div>
-                    
-                    {/* Arms */}
-                    <div className="absolute top-10 -left-4 w-8 h-16 bg-yellow-300 rounded-full"></div>
-                    <div className="absolute top-10 -right-4 w-8 h-16 bg-yellow-300 rounded-full"></div>
-                    
-                    {/* Book in arms */}
-                    <div className="absolute top-12 left-1/2 transform -translate-x-1/2 w-16 h-20 bg-red-500 rounded-lg shadow-lg">
-                      <div className="w-full h-full bg-gradient-to-br from-red-400 to-red-600 rounded-lg p-2">
-                        <div className="text-white text-xs font-bold text-center mt-2">JackBoo</div>
-                        <div className="w-8 h-8 bg-yellow-300 rounded-full mx-auto mt-1"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Decorative elements */}
-              <div className="absolute top-10 -left-4 w-3 h-8 bg-red-400 transform rotate-45"></div>
-              <div className="absolute top-20 -right-6 w-3 h-8 bg-blue-400 transform -rotate-45"></div>
-              <div className="absolute bottom-16 -left-8 w-3 h-8 bg-green-400 transform rotate-12"></div>
-            </div>
+            <img
+              src={bearIllustrationPath}
+              alt="Urso do Clube JackBoo"
+              className="w-full max-w-sm h-auto object-contain"
+            />
           </div>
         </div>
       </div>
+      {/* Elementos decorativos - Mantidos fora para sua decisão */}
     </section>
   );
 };
